@@ -2,6 +2,8 @@ package cn.bvin.lib.module.net;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.bvin.library.utils.StringUtils;
 /**
  * 
  * @ClassName: MapParam 
@@ -40,5 +42,9 @@ public class MapParam {
 	
 	public void clear() {
 		this.params.clear();
+	}
+	
+	public byte[] getBytes() {
+		return StringUtils.generateUrlString(this.params).getBytes();
 	}
 }

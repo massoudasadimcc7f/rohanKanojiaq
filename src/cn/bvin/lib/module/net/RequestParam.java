@@ -19,11 +19,16 @@ public class RequestParam {
 	
 	private File file;
 
+	/**
+	 * 
+	 * @param mapParams 
+	 */
 	public RequestParam(MapParam mapParams) {
 		super();
-		this.mapParams = mapParams;
+		this.mapParams = mapParams;  
 	}
-
+ 
+	
 	public MapParam getMapParams() {
 		return mapParams;
 	}
@@ -33,7 +38,15 @@ public class RequestParam {
 		this.bytes = bytes;
 	}
 
+	/**
+	 * 把其他 参数形式转换成byte数组或者直接获取
+	 * 
+	 * @return: byte[] 返回一个字节数组
+	 */
 	public byte[] getBytes() {
+		if (mapParams!=null) {
+			return mapParams.getBytes();
+		}
 		return bytes;
 	}
 

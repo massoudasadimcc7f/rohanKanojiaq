@@ -1,5 +1,6 @@
 package cn.bvin.lib.module.net;
 
-public class HttpStack {
+public interface HttpStack {
 
+	public OriginResponces performRequest(Request request);
 }

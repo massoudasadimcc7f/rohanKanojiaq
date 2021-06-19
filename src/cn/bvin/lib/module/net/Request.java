@@ -1,10 +1,8 @@
 package cn.bvin.lib.module.net;
 
 /**
- * @ClassName: Request 
- * @Description: TODO
- * @author: Bvin
- * @date: 2015年4月28日 下午4:25:19
+ * 构成一个请求的类，请求地址url必须有，参数可以不需要
+ * 没有参数就默认用Get方法，有参数就用Post
  */
 public class Request {
 
