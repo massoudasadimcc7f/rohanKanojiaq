@@ -28,11 +28,22 @@ public class RequestManager {
 		return requestQueue;
 	}
 	
+	/**
+	 * 添加请求
+	 * @param request 请求对象
+	 * @param tag 标签，通过这个标签可以操作(取消)请求
+	 */
 	public static void addRequest(Request request, Object tag) {
-		if (tag != null) {
-			request.setTag(tag);
-		}
+		request.setTag(tag!=null?tag:request.getUrl());
 		mRequestQueue.add(request);
+	}
+	
+	/**
+	 * 添加请求，标签为Request的Url
+	 * @param request 请求对象
+	 */
+	public static void addRequest(Request request) {
+		addRequest(request, null);
 	}
 	
 	public static void clearRequests(Object tag) {
