@@ -46,6 +46,10 @@ public class RequestManager {
 		addRequest(request, null);
 	}
 	
+	/**
+	 * 按标签清除(取消)请求
+	 * @param tag 请求标签
+	 */
 	public static void clearRequests(Object tag) {
 		mRequestQueue.cancelAll(tag);
 	}
