@@ -42,7 +42,13 @@ cn.bvin.lib.module.net.volley.RequestManager:
 		mRequestQueue.cancelAll(tag);
 	}
 ```
-
+权限
+--------
+AndroidMenifest.xml所需权限
+```
+    //网络权限
+    <uses-permission android:name="android.permission.INTERNET" />
+```
 使用
 --------
 示例就拿检测更新的一个demo来看
