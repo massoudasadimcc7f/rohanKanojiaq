@@ -3,7 +3,7 @@ package cn.bvin.lib.module.net;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.bvin.library.utils.StringUtils;
+import cn.bvin.lib.module.utils.StringUtils;
 /**
  * 
  * @ClassName: MapParam 
