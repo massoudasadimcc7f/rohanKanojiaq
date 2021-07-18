@@ -13,7 +13,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-public abstract class GsonRequest<T> extends BaseRequest<T>{
+public class GsonRequest<T> extends BaseRequest<T>{
     
     private final Gson gson = new Gson();
     
