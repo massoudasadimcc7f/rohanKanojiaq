@@ -1,7 +1,9 @@
 package cn.bvin.lib.module.net.volley;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import cn.bvin.lib.module.utils.StringUtils;
 
@@ -62,15 +64,28 @@ public abstract class BaseRequest<T> extends Request<T>{
         }
     }
 
+
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        if (mapParams!=null&&!mapParams.isEmpty()) {
+            Map<String, String> params = new HashMap<String, String>();
+            for (Entry<String, Object> entry: mapParams.entrySet()) {
+                params.put(entry.getKey(), entry.getValue().toString());
+            }
+            return params;
+        }
+        return super.getParams();
+    }
+
     @Override
     public byte[] getBody() throws AuthFailureError {
         //优先发送RequestParams形式的参数
         if (reqParams!=null&&!reqParams.isEmpty()) {
             return encodeParameters(reqParams, getParamsEncoding());
         //如果 reqParams参数为空就传mapParams
-        } else if (mapParams != null && mapParams.size() > 0) {
+        } else /*if (mapParams != null && mapParams.size() > 0) {
             return encodeParameters(mapParams, getParamsEncoding());
-        } {//如果都为空就调用父类的getBody()
+        } */{//如果都为空就调用父类的getBody()
             return super.getBody();
         }
     }
