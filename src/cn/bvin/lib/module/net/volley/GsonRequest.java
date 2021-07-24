@@ -1,7 +1,11 @@
 package cn.bvin.lib.module.net.volley;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.Map;
+
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -18,6 +22,7 @@ public class GsonRequest<T> extends BaseRequest<T>{
     private final Gson gson = new Gson();
     
     private final Class<T> clazz;
+    private final Type type;
     private final Listener<T> listener;
     
     /**
@@ -31,6 +36,15 @@ public class GsonRequest<T> extends BaseRequest<T>{
         super(url, errorListener);
         this.clazz = clazz;
         this.listener = listener;
+        this.type = null;
+    }
+    
+    public GsonRequest(String url,Type type,Listener<T> listener,ErrorListener errorListener) {
+        super(url, errorListener);
+        this.type = type;
+        this.clazz = null;
+        this.listener = listener;
+        type = null;
     }
     
     /**
@@ -45,6 +59,14 @@ public class GsonRequest<T> extends BaseRequest<T>{
     public GsonRequest(int method, String url,Map<String, Object> mapParams,Class<T> clazz,Listener<T> listener,ErrorListener errorListener) {
         super(method, url, mapParams, errorListener);
         this.clazz = clazz;
+        this.listener = listener;
+        this.type = null;
+    }
+    
+    public GsonRequest(int method, String url,Map<String, Object> mapParams,Type type,Listener<T> listener,ErrorListener errorListener) {
+        super(method, url, mapParams, errorListener);
+        this.type = type;
+        this.clazz = null;
         this.listener = listener;
     }
     
@@ -61,25 +83,46 @@ public class GsonRequest<T> extends BaseRequest<T>{
         super(method, url, reqParams, errorListener);
         this.clazz = clazz;
         this.listener = listener;
+        this.type = null;
     }
     
+    public GsonRequest(int method, String url,RequestParams reqParams,Type type,Listener<T> listener,ErrorListener errorListener) {
+        super(method, url, reqParams, errorListener);
+        this.clazz = null;
+        this.listener = listener;
+        this.type = type;
+    }
    
     @Override
     protected void deliverResponse(T response) {
         listener.onResponse(response);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
+        String json = null;
         try {
-            String json = new String(
+            json = new String(
                     response.data, HttpHeaderParser.parseCharset(response.headers));
-            return Response.success(
-                    gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
+            if (clazz!=null) {
+                return Response.success(
+                        gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
+            }else if (type!=null) {
+                return (Response<T>) Response.success(
+                        gson.fromJson(json, type), HttpHeaderParser.parseCacheHeaders(response));
+            }else {
+                return Response.error(new VolleyError("gson解析失败，因为gson的class<T>或者type为空"));
+            }
+            
         } catch (UnsupportedEncodingException e) {
             return Response.error(new VolleyError(e));
         } catch (JsonSyntaxException e) {
-            return Response.error(new ParseError(e));
+            if (TextUtils.isEmpty(json)) {
+                return Response.error(new ParseError(e));
+            } else {
+                return Response.error(new JsonParseError(json,e));
+            }
         }
     }
     
